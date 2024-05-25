@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.ComponentModel;
+using System.Security.Cryptography.X509Certificates;
 
 namespace propSol.Model
 {
@@ -36,6 +37,15 @@ namespace propSol.Model
 
 
         public string name = "New Ply";
+
+        public enum plyType
+        {
+            [Description("Unidirectional")] Unidirectional = 1,
+            [Description("Woven")] Woven = 2,
+            [Description("Bi-Axial")] Biaxial = 3,
+            [Description("Quadriaxial")] Quadraxial = 4,
+            [Description("Custom")] Custom = 5,
+        }
 
 
         //Parametless constructor, to obtain when doing any type of ply.

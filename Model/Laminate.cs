@@ -13,6 +13,13 @@
 
         public double[] distanceNeutralAxis;
 
+        public Boolean isSymetric;
+
+        public enum failureType
+        {
+
+        }
+
         public Laminate(Ply[] stackOfPlies)
         {
 
