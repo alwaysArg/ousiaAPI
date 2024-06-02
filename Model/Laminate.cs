@@ -1,4 +1,4 @@
-﻿namespace propSol.Model
+﻿namespace ousiaAPI.Model
 {
     public class Laminate
     {
@@ -8,12 +8,26 @@
         public double[,] matrixA = new double[3, 3];
         public double[,] matrixB = new double[3, 3];
         public double[,] matrixD = new double[3, 3];
+        public double[,] matrixABD = new double[6,6];
+        public double[,] inverseMatrixABD =  new double[6,6];
 
         public double totalLaminateThickness = 0;
 
         public double[] distanceNeutralAxis;
 
         public Boolean isSymetric;
+
+        //Variables for the equivalent laminate obtained
+        //Lamiants have all equivalent variables both for bending and inplane stresses
+        
+        public double[] tensileModulusInPlane = new double[2]; //Tensile modulus in 11 and 22
+        public double[] tensileModulusBending = new double[2]; //Tensile modulus in 11 and 22
+        public double[] shearModulusInPlane = new double[3]; // Shear modlus in 12,13,23
+        public double[] shearModulusBending = new double[3]; // Shear modlus in 12,13,23
+        public double volumeFraction { get; set; }//Fiber volume fraction
+        public double weightFraction { get; set; } //Fiber weight fraction
+        public double[] poissonRatioInPlane = new double[2]; // Poisson ratio
+        public double[] poissonRatioBending = new double[2]; // Poisson ratio
 
         public enum failureType
         {
@@ -40,57 +54,17 @@
 
         }
 
+    }
 
-
-        public void laminateMacroMechanics(Ply[] stackOfPlies)
-            //Assumptions
-            //1. Thin laminate. Shear is constant through the laminate
-            //2. Normal strain ezz is 0.
+    public class LoadedLaminate : Laminate
+    {
+        public Load load { get;set;}
+        public double[] strains { get; set; } = new double[6];
+        public double[] stresses { get; set; } = new double[6];
+        public LoadedLaminate(Ply[] stackOfPlies, Load loades) : base(stackOfPlies)
         {
-            this.stackOfPlies = stackOfPlies;
-
-            
-
-            //Calculate matrix A
-            for ( int i = 0; i < stackOfPlies.Length; i++)
-            {
-                for ( int j = 0; j < stackOfPlies[i].matrixQslash.GetLength(0); j++)
-                {
-                    for ( int k = 0; k < stackOfPlies[i].matrixQslash.GetLength(1); k++)
-                    {
-                        matrixA[j,k] = stackOfPlies[i].plyThickness * stackOfPlies[i].matrixQslash[j,k];
-                    }
-                }
-            }
-
-            //Calculate matrix B
-            for (int i = 0; i < stackOfPlies.Length; i++)
-            {
-                for (int j = 0; j < stackOfPlies[i].matrixQslash.GetLength(0); j++)
-                {
-                    for (int k = 0; k < stackOfPlies[i].matrixQslash.GetLength(1); k++)
-                    {
-                        matrixB[j, k] = stackOfPlies[i].plyThickness * stackOfPlies[i].matrixQslash[j, k] * this.distanceNeutralAxis[i];
-                    }
-                }
-            }
-
-            for (int i = 0; i < stackOfPlies.Length; i++)
-            {
-                for (int j = 0; j < stackOfPlies[i].matrixQslash.GetLength(0); j++)
-                {
-                    for (int k = 0; k < stackOfPlies[i].matrixQslash.GetLength(1); k++)
-                    {
-                        matrixB[j, k] = stackOfPlies[i].plyThickness * stackOfPlies[i].matrixQslash[j, k] * this.distanceNeutralAxis[i];
-                    }
-                }
-            }
-
-
+            load = loades;
         }
 
-        
-
-        
     }
 }

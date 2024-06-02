@@ -1,9 +1,12 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using ousiaAPI.Model;
+using System.Security.Cryptography.X509Certificates;
 
-namespace propSol.Model
+namespace ousiaAPI.Model
 {
     public class Analyses
     {
+
+        
         public RVE microMechanics(Fiber fiber, Resin resin, double fiberVolumeFraction)
         {
             RVE outputRVE = new RVE(fiber, resin, fiberVolumeFraction);
@@ -36,7 +39,73 @@ namespace propSol.Model
         
         public Laminate macroMechanics(Ply[] stackOfPlies)
         {
+            //Assumptions
+            //1. Thin laminate. Shear is constant through the laminate
+            //2. Normal strain ezz is 0.
             Laminate outputLaminate = new Laminate(stackOfPlies);
+
+            //Calculate matrix A
+            for (int i = 0; i < stackOfPlies.Length; i++)
+            {
+                for (int j = 0; j < stackOfPlies[i].matrixQslash.GetLength(0); j++)
+                {
+                    for (int k = 0; k < stackOfPlies[i].matrixQslash.GetLength(1); k++)
+                    {
+                        outputLaminate.matrixA[j, k] = stackOfPlies[i].plyThickness * stackOfPlies[i].matrixQslash[j, k];
+                    }
+                }
+            }
+
+            //Calculate matrix B
+            for (int i = 0; i < stackOfPlies.Length; i++)
+            {
+                for (int j = 0; j < stackOfPlies[i].matrixQslash.GetLength(0); j++)
+                {
+                    for (int k = 0; k < stackOfPlies[i].matrixQslash.GetLength(1); k++)
+                    {
+                        outputLaminate.matrixB[j, k] = stackOfPlies[i].plyThickness * stackOfPlies[i].matrixQslash[j, k] * outputLaminate.distanceNeutralAxis[i];
+                    }
+                }
+            }
+
+
+            //Calculate matrix D
+            for (int i = 0; i < stackOfPlies.Length; i++)
+            {
+                for (int j = 0; j < stackOfPlies[i].matrixQslash.GetLength(0); j++)
+                {
+                    for (int k = 0; k < stackOfPlies[i].matrixQslash.GetLength(1); k++)
+                    {
+                        outputLaminate.matrixB[j, k] = stackOfPlies[i].matrixQslash[j, k] * (stackOfPlies[i].plyThickness * Math.Pow(outputLaminate.distanceNeutralAxis[i],2) + Math.Pow(stackOfPlies[i].plyThickness,3)/12) ;
+                    }
+                }
+            }
+
+            //Obtain ABD matrix
+
+            outputLaminate.matrixABD = new double[,]
+            {
+                { outputLaminate.matrixA[0,0],outputLaminate.matrixA[0,1],outputLaminate.matrixA[0,2],outputLaminate.matrixB[0,0],outputLaminate.matrixB[0,1],outputLaminate.matrixB[0,2] },
+                { outputLaminate.matrixA[1,0],outputLaminate.matrixA[1,1],outputLaminate.matrixA[1,2],outputLaminate.matrixB[1,0],outputLaminate.matrixB[1,1],outputLaminate.matrixB[1,2] },
+                { outputLaminate.matrixA[2,0],outputLaminate.matrixA[2,1],outputLaminate.matrixA[2,2],outputLaminate.matrixB[2,0],outputLaminate.matrixB[2,1],outputLaminate.matrixB[2,2] },
+                { outputLaminate.matrixB[0,0],outputLaminate.matrixB[0,1],outputLaminate.matrixB[0,2],outputLaminate.matrixD[0,0],outputLaminate.matrixD[0,1],outputLaminate.matrixD[0,2] },
+                { outputLaminate.matrixB[1,0],outputLaminate.matrixB[1,1],outputLaminate.matrixB[1,2],outputLaminate.matrixD[1,0],outputLaminate.matrixD[1,1],outputLaminate.matrixD[1,2] },
+                { outputLaminate.matrixB[2,0],outputLaminate.matrixB[2,1],outputLaminate.matrixB[2,2],outputLaminate.matrixD[2,0],outputLaminate.matrixD[2,1],outputLaminate.matrixD[2,2] }
+            };
+
+            //Obtain the inverse of ABD
+
+            outputLaminate.inverseMatrixABD = Utils.inverseMatrix(outputLaminate.matrixABD);
+
+            outputLaminate.tensileModulusInPlane[0] = 1/(Math.Pow(outputLaminate.totalLaminateThickness,3) * outputLaminate.inverseMatrixABD[3,3]);
+            outputLaminate.tensileModulusInPlane[1] = 1 / (Math.Pow(outputLaminate.totalLaminateThickness, 3) * outputLaminate.inverseMatrixABD[4, 4]);
+            outputLaminate.shearModulusInPlane[0] = 1 / (Math.Pow(outputLaminate.totalLaminateThickness, 3) * outputLaminate.inverseMatrixABD[5, 5]);
+            outputLaminate.poissonRatioInPlane[0] = outputLaminate.matrixABD[0, 1] / outputLaminate.matrixABD[1, 1];
+
+            outputLaminate.tensileModulusBending[0] = 1 / (outputLaminate.totalLaminateThickness * outputLaminate.inverseMatrixABD[0, 0]);
+            outputLaminate.tensileModulusBending[1] = 1 / (outputLaminate.totalLaminateThickness * outputLaminate.inverseMatrixABD[1, 1]);
+            outputLaminate.shearModulusBending[0] = 1 / (outputLaminate.totalLaminateThickness * outputLaminate.inverseMatrixABD[2, 2]);
+            outputLaminate.poissonRatioBending[0] = outputLaminate.matrixABD[3, 4] / outputLaminate.matrixABD[4, 4];
 
 
             return outputLaminate;

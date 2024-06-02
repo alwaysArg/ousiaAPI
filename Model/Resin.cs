@@ -1,4 +1,4 @@
-﻿namespace propSol.Model
+﻿namespace ousiaAPI.Model
 {
 
     enum Type

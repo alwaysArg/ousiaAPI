@@ -1,4 +1,4 @@
-﻿namespace propSol.Model
+﻿namespace ousiaAPI.Model
 {
     public enum Material
     {
@@ -7,10 +7,10 @@
         Aramid,
         
     }
-    public class Fiber(string name)
+    public class Fiber
 
     {
-        
+        public string name { get; set; } = "New Fibre";
         private Material _material { get; set; } //
         public double TensileModulus { get; set; } //Young Modulus, commonly used letter: E [MPa]
 

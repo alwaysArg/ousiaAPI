@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Security.Cryptography.X509Certificates;
 
-namespace propSol.Model
+namespace ousiaAPI.Model
 {
     public class Ply
     {
+        public string Id { get; set; }
+
         //Variables
-       
+
 
         //Methods
         //To create a ply can be done in three ways.
@@ -14,12 +16,13 @@ namespace propSol.Model
         // By definign an existing ply.
         // By different norms which follow the formulas in these.
         // Both ways the end results has to eb sthe same. The idea behind micromechanics
-        public double[] tensileModulus = new double[2]; //Tensile modulus in 11 and 22
-        public double[] shearModulus = new double[3]; // Shear modlus in 12,13,23
+        public double[] tensileModulus { get; set; } = new double[2]; //Tensile modulus in 11 and 22
+        public double[] shearModulus { get; set; } = new double[3]; // Shear modlus in 12,13,23
         public double volumeFraction { get; set; }//Fiber volume fraction
         public double weightFraction { get; set; } //Fiber weight fraction
-        public double[] poissonRatio = new double[2]; // Poisson ratio
-        public double[,] fiberOrientationRatio = new double[50, 2]; //To obtain properties for the laminate according the amount of fibers in each direction
+        public double[] poissonRatio { get; set; } = new double[2]; // Poisson ratio
+        public double[] fiberOrientationAngle { get; set; }
+        public double[] fiberOrientationMass { get; set; }//To obtain properties for the laminate according the amount of fibers in each direction
         public double angle { get; set; }
 
         //Variables neeed to do the Ply mechanics
@@ -36,7 +39,7 @@ namespace propSol.Model
 
 
 
-        public string name = "New Ply";
+        
 
         public enum plyType
         {
@@ -55,10 +58,7 @@ namespace propSol.Model
         }
 
 
-        public Ply(string name) :this()
-        {
-            this.name = name;
-        }
+        
 
 
         public void PlyMechanics()
