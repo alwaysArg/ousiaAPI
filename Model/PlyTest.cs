@@ -7,7 +7,7 @@
         {
             return new Ply
             {
-                name = "Carbon Bi-Axial 400 gsm",
+                Name = "Carbon Bi-Axial 400 gsm",
                 volumeFraction = 0.5,
                 tensileModulus = [23000, 23000],
                 shearModulus = [40000, 3500, 3500],
@@ -20,7 +20,7 @@
         {
             return new Ply
             {
-                name = "E-Glass Unidirectional 400 gsm at 45 degrees",
+                Name = "E-Glass Unidirectional 400 gsm at 45 degrees",
                 volumeFraction = 0.5,
                 tensileModulus = [37864, 11224],
                 shearModulus = [3317, 3500, 3500],
@@ -36,7 +36,7 @@
         {
             return new Ply
             {
-                name = "E-Glass Unidirectional 400 gsm at 45 degrees",
+                Name = "E-Glass Unidirectional 400 gsm at 45 degrees",
                 volumeFraction = 0.5,
                 tensileModulus = [37864, 11224],
                 shearModulus = [3317, 3500, 3500],
@@ -53,7 +53,7 @@
         {
             return new Ply
             {
-                name = "CSM at 0",
+                Name = "CSM at 0",
                 volumeFraction = 0.50,
                 tensileModulus = [21214, 21214],
                 shearModulus = [7539, 3500, 3500],

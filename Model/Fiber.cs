@@ -1,6 +1,6 @@
 ﻿namespace ousiaAPI.Model
 {
-    public enum Material
+    public enum FiberMaterial
     {
         Carbon,
         Glass,
@@ -10,8 +10,9 @@
     public class Fiber
 
     {
-        public string name { get; set; } = "New Fibre";
-        private Material _material { get; set; } //
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        private FiberMaterial _material { get; set; } //
         public double TensileModulus { get; set; } //Young Modulus, commonly used letter: E [MPa]
 
         public double density { get; set; } // [kg/m³]

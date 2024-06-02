@@ -2,6 +2,9 @@
 {
     public class Laminate
     {
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
         //Laminate is composed with layer 0 on male mould side. Laminate in i=0, is bottom lamiante.
         public Ply[] stackOfPlies = new Ply[100];
 

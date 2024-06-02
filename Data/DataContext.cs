@@ -10,6 +10,6 @@ namespace ousiaAPI.Data
 
         }
 
-        public DbSet<Ply> Plies { get; set; }
+        public DbSet<Ply> Plys { get; set; }
     }
 }

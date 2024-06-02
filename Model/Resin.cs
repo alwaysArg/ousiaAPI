@@ -1,15 +1,19 @@
 ﻿namespace ousiaAPI.Model
 {
 
-    enum Type
+    enum ResinMaterial
     {
         Epoxy,
         Polyester,
         Vinilester
     }
-    public class Resin(string name)
+    public class Resin()
     {
-        private Material _material { get; set; } //
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+
+        private ResinMaterial _material { get; set; } //
         public double TensileModulus { get; set; } //Young Modulus, commonly used letter: E [MPa]
 
         public double density { get; set; } // [kg/m³]

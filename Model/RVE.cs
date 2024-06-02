@@ -4,6 +4,9 @@
         //Representative Volume Element.
         //Is the smallest portion of material that contains all the properties
     {
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
         public double[] tensileModulus = new double[2]; //Tensile modulus in 11 and 22
         public double[] shearModulus = new double[3]; // Shear modlus in 12,13,23
         public double fiberVolumeFraction; //Fiber volume fraction
