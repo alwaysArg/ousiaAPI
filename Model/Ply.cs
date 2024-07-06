@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel;
 using System.Security.Cryptography.X509Certificates;
+using System.ComponentModel.DataAnnotations;
 
 namespace ousiaAPI.Model
 {
     public class Ply
     {
-        public int Id { get; set; }
+        [Key]
+        public int PlyId { get; set; }
 
         public string Name { get; set; } = string.Empty;
 
@@ -54,10 +56,6 @@ namespace ousiaAPI.Model
 
 
         //Parametless constructor, to obtain when doing any type of ply.
-        public Ply()
-        {
-
-        }
 
 
         
